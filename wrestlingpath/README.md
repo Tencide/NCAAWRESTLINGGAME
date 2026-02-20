@@ -26,6 +26,26 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Create a wrestler (name, weight class, seed), then each month pick an action (train technique, conditioning, compete, rest, study, etc.) and tap **Next month**. Districts/state (HS), conference/NCAA (college), and offseason events (Fargo, Super 32, WNO) run automatically. Use the **Rankings** tab to see your weight-class board.
 
+## Vercel (recommended – runs like local)
+
+The app is a **static export** (same as local `npm run build` → `out/`). To have the deployed site behave like local:
+
+1. **Connect** your repo (e.g. the repo that contains this `wrestlingpath` folder) to a Vercel project.
+2. **Project Settings** → **General**:
+   - **Root Directory**: `wrestlingpath` (required if the repo root is the parent of this folder)
+   - **Framework Preset**: **Other** (so Vercel serves the static `out/` folder instead of running a Next server)
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `out`
+3. **Save** and redeploy. The `vercel.json` in this folder already sets rewrites so `/` and client routes serve `index.html`.
+
+If you deploy from the **CLI**, run from the **parent** of `wrestlingpath` (e.g. `cs319`), not from inside `wrestlingpath`, so the Root Directory `wrestlingpath` resolves correctly:
+```bash
+cd path/to/cs319
+npx vercel --prod --yes
+```
+
+**Still not working?** In Vercel → **Settings** → **General**: set **Framework Preset** to **Other** (not Next.js), set **Root Directory** to `wrestlingpath`, **Build Command** to `npm run build`, **Output Directory** to `out`. Save, then **Deployments** → … on latest → **Redeploy**.
+
 ## GitHub Pages (static hosting)
 
 The app is built as a **static export** (`output: 'export'`), so it works on GitHub Pages with no server.
