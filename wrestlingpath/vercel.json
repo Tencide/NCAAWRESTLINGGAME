@@ -1,4 +1,8 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "out"
+  "outputDirectory": "out",
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/((?!_next/|_not-found|favicon|.*\\.(ico|js|css|svg|woff2|html|txt|map)).*)", "destination": "/index.html" }
+  ]
 }

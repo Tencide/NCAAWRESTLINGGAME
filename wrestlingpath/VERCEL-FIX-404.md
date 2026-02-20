@@ -1,18 +1,34 @@
-# Fix 404 on Vercel – use static output
+# Fix 404 on Vercel – checklist
 
-The build succeeds but the site 404s because Vercel is using the **Next.js** pipeline instead of serving the static **`out`** folder.
+The build succeeds but the site 404s. Do **all** of the following, then redeploy.
 
-Do this **in the Vercel dashboard** (one time):
+## 1. Vercel dashboard (Project → Settings → General)
 
-1. Open your project → **Settings** → **General**.
-2. Under **Build & Development Settings**:
-   - **Framework Preset:** change from **Next.js** to **Other**.
-   - **Build Command:** `npm run build` (keep as is).
-   - **Output Directory:** set to **`out`** (this is required).
-   - **Root Directory:** `wrestlingpath` (if your app is in that subfolder).
-3. **Save**.
-4. Go to **Deployments** → **…** on the latest → **Redeploy**.
+Under **Build & Development Settings**, set exactly:
 
-After redeploy, Vercel will run `npm run build`, then serve the contents of **`out`** (including `index.html` at `/`), and the 404 should go away.
+| Setting | Value |
+|--------|--------|
+| **Framework Preset** | **Other** (not Next.js) |
+| **Build Command** | `npm run build` |
+| **Output Directory** | `out` |
+| **Root Directory** | `wrestlingpath` (if your repo has the app in that folder; leave blank if the repo root is the app) |
 
-Also ensure the repo you deploy (e.g. **Tencide/ncaawrestling**) has the latest `vercel.json` with `"outputDirectory": "out"` and push if needed.
+Click **Save**.
+
+## 2. Root Directory
+
+- If your repo has a **wrestlingpath** folder (and package.json is inside it), Root Directory = **wrestlingpath**.
+- If your repo root **is** the Next.js app (package.json at root), leave Root Directory **blank**.
+
+## 3. Redeploy
+
+**Deployments** → **…** on the latest deployment → **Redeploy** (don’t “Use existing Build Cache” if you can uncheck it).
+
+## 4. Repo has the latest code
+
+Ensure the repo Vercel deploys from has:
+
+- **vercel.json** with `"outputDirectory": "out"` and `"rewrites"` (so `/` and unknown paths serve `index.html`).
+- Push any local changes and let Vercel redeploy from the new commit.
+
+If it still 404s, open the latest deployment → **Building** log and confirm the build runs from the correct directory and that the **Deploying** step mentions the `out` output. Share that log if needed.
